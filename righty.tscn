@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://7g4rq28jatn2"]
+
+[ext_resource type="Texture2D" uid="uid://bdh7tau2xtw2h" path="res://icon.svg" id="1_ew410"]
+[ext_resource type="Script" path="res://righty.gd" id="2_mgwml"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y7ero"]
+size = Vector2(130, 132)
+
+[node name="Righty" type="CharacterBody2D"]
+position = Vector2(647, 425)
+script = ExtResource("2_mgwml")
+metadata/_edit_group_ = true
+
+[node name="RightSideCollisionBox" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_y7ero")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ew410")
