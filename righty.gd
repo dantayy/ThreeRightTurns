@@ -7,12 +7,12 @@ var turn = false # set to true when button pressed
 var run = false # set to true when button pressed at start of game, do not unset afterwards
 
 # perform frame update actions in here
-func _physics_process(delta):
+func _physics_process(_delta):
 	if not run:
 		return
 	elif turn:
 		direction = direction.rotated(PI / 2)
-		#rotate(PI / 2)
+		rotate(PI / 2)
 		turn = not turn
 	velocity = direction * speed
 	move_and_slide()

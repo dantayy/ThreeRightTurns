@@ -4,16 +4,16 @@
 [ext_resource type="Script" path="res://righty.gd" id="2_mgwml"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y7ero"]
-size = Vector2(130, 132)
+size = Vector2(48, 48)
 
 [node name="Righty" type="CharacterBody2D"]
-position = Vector2(647, 425)
 script = ExtResource("2_mgwml")
 metadata/_edit_group_ = true
 
-[node name="RightSideCollisionBox" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
+[node name="CollisionBox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_y7ero")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 9.53674e-07)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_ew410")
