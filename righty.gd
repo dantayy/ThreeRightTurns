@@ -3,17 +3,19 @@ extends CharacterBody2D
 # custom node vars
 var speed = 200
 var direction = Vector2.UP
-var turn = false # set to true when button pressed
+var turnKeyed = false # set to true when button pressed
+var turnCapable = false
 var run = false # set to true when button pressed at start of game, do not unset afterwards
 
 # perform frame update actions in here
 func _physics_process(_delta):
 	if not run:
 		return
-	elif turn:
+	elif turnKeyed and turnCapable:
 		direction = direction.rotated(PI / 2)
 		rotate(PI / 2)
-		turn = not turn
+		turnKeyed = not turnKeyed
+		turnCapable = not turnCapable
 	velocity = direction * speed
 	move_and_slide()
 
@@ -28,5 +30,25 @@ func _input(event):
 	if event.is_action_pressed("ui_right"):
 		if not run:
 			run = true
-		elif not turn:
-			turn = true
+		elif not turnKeyed:
+			turnKeyed = true
+
+
+func _on_wall_collision_detector_body_entered(body):
+	# wall detected to the right, turn not possible
+	turnCapable = false
+
+
+func _on_wall_collision_detector_body_exited(body):
+	# wall no longer detected to the right, turn possible
+	turnCapable = true
+
+
+func _on_boost_collision_detector_body_entered(body):
+	# increase righty's speed
+	speed += 50
+
+
+func _on_goal_collision_detector_body_entered(body):
+	# handle level transitions here
+	get_tree().quit()
