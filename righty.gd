@@ -7,6 +7,10 @@ var turnKeyed = false # set to true when button pressed
 var turnCapable = false
 var run = false # set to true when button pressed at start of game, do not unset afterwards
 
+# signals to start/end races against pathfinder
+signal start_race()
+signal end_race()
+
 # perform frame update actions in here
 func _physics_process(_delta):
 	if not run:
@@ -30,6 +34,7 @@ func _input(event):
 	if event.is_action_pressed("ui_right"):
 		if not run:
 			run = true
+			start_race.emit()
 		elif not turnKeyed:
 			turnKeyed = true
 
@@ -50,5 +55,9 @@ func _on_boost_collision_detector_body_entered(body):
 
 
 func _on_goal_collision_detector_body_entered(body):
-	# handle level transitions here
-	get_tree().quit()
+	print("Player reached goal!")
+	run = false
+	turnKeyed = false
+	turnCapable = false
+	end_race.emit()
+	#get_tree().quit()

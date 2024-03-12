@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dxvpj5udt2k57"]
+[gd_scene load_steps=6 format=3 uid="uid://dxvpj5udt2k57"]
 
 [ext_resource type="Texture2D" uid="uid://bguwsx7kmx67b" path="res://Tiles.png" id="1_swh5p"]
+[ext_resource type="Script" path="res://level_mgr.gd" id="2_7ff1j"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jcdrl"]
 
@@ -151,4 +152,8 @@ sources/1 = SubResource("TileSetAtlasSource_g5uev")
 [node name="TileMap" type="TileMap"]
 tile_set = SubResource("TileSet_warx8")
 format = 2
-layer_0/name = "Floor"
+layer_0/name = "Main"
+layer_1/name = "Pathfinder"
+layer_1/z_index = 1
+layer_1/tile_data = PackedInt32Array()
+script = ExtResource("2_7ff1j")
