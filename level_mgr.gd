@@ -5,6 +5,8 @@ extends TileMap
 # position and dimensions of the grid the A* pathfinder will use
 # should match what the developer paints
 @export var level_rect = Rect2i(0,0,5,5)
+# name of next level to load when load_next_level is called
+@export var next_level_name = ""
 
 # constant atlas markers for wall, spawn, goal, and pathfinder tiles
 const wall_atlas = Vector2i(1,0)
@@ -21,6 +23,10 @@ const main_source = 1
 
 # signal to emit when the A* pathing completes
 signal pathing_complete()
+#signal to emit when this level loads
+signal level_loaded(pathing_possible:bool)
+# signal to emit when there is no level to load in this one's place, 
+signal game_over()
 
 # the A* pathing tool
 var pathfinder = AStarGrid2D.new()
@@ -57,13 +63,17 @@ func _ready():
 	# check to make sure spawn and goal are unique, if not then complain and bail early
 	if start_point == end_point:
 		print("Spawn/goal are equal or nonexistant, no path to find!")
+		level_loaded.emit(false)
 		return
 	# find the path from spawn to goal with the grid we've set up
 	path = pathfinder.get_id_path(start_point, end_point)
 	# if no path was found, complain and bail
 	if path.is_empty():
 		print("No path between spawn and goal could be made!")
+		level_loaded.emit(false)
 		return
+		
+	level_loaded.emit(true)
 
 func walk_path():
 	# draw the path over the map with the set ammount of time between steps
@@ -74,11 +84,19 @@ func walk_path():
 	# send the pathing complete signal to alert a game manager to initiate the loss state
 	print("Path walked by the pathfinder!")
 	pathing_complete.emit()
+	
+func load_next_level():
+	# attempt to load whatever is in the next level name by path string
+	var error:Error = get_tree().change_scene_to_file(next_level_name)
+	# force game to end if no next level could be loaded
+	if(error != OK):
+		print("Attempt to load another level failed, ending game!")
+		game_over.emit()
+		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
 
 func _on_righty_start_race():
 	walk_path()
