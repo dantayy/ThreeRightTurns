@@ -1,7 +1,9 @@
 extends Node2D
 
 @export var level_names:Array[String]
-var current_level
+const start_level_name:String = "res://righty.tscn"
+var start_level = preload(start_level_name)
+var current_level:Level
 var player_character
 var hud:CanvasLayer
 var overlay_text:RichTextLabel
@@ -24,12 +26,26 @@ var overlay_text:RichTextLabel
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# get persistent nodes
 	player_character = get_node("Righty")
 	hud = get_node("HUD")
 	overlay_text = get_node("HUD/StatusText")
-	if(level_names.is_empty()):
-		print("No levels passed to the array! Make some levels to play and try again!")
+	# fail out if loaded asset is not a level
+	if(not start_level is Level):
+		print("Bad starting level passed, quiting!")
 		get_tree().quit()
+		return
+	
+	# instantiate starting level and set to current level var
+	current_level = start_level.instantiate()
+	# add level to main scene
+	add_child(current_level)
+	# move it to the bottom of the scene tree so it sits behind the player character
+	move_child(current_level, 0)
+	# move player to starting position in the loaded level
+	print("Current level start point == %v" % current_level.start_point)
+	player_character.position.x = current_level.start_point.x * current_level.tile_set.tile_size.x + current_level.tile_set.tile_size.x / 2
+	player_character.position.y = current_level.start_point.y * current_level.tile_set.tile_size.y + current_level.tile_set.tile_size.y / 2
 	# disable player pre-game	
 	player_character.visible = false
 	player_character.set_process_input(false)
@@ -37,9 +53,8 @@ func _ready():
 	# set prompt text to "ready?"
 	overlay_text.visible = true
 	overlay_text.text = "[center]Ready?[/center]"
-	#overlay_text.set_anchors_preset(Control.PRESET_FULL_RECT)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	#overlay_text.set_anchors_preset(Control.PRESET_FULL_RECT)
 	pass

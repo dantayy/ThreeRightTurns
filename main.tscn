@@ -1,15 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bca0bs5awyuxj"]
+[gd_scene load_steps=3 format=3 uid="uid://bca0bs5awyuxj"]
 
 [ext_resource type="Script" path="res://game_mgr.gd" id="1_dkhg0"]
-[ext_resource type="PackedScene" uid="uid://dxvpj5udt2k57" path="res://tiles.tscn" id="2_hi3tv"]
 [ext_resource type="PackedScene" uid="uid://7g4rq28jatn2" path="res://righty.tscn" id="2_p1m7t"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_dkhg0")
 level_names = Array[String](["Level1", "Level2", "Level3"])
-
-[node name="TileMap" parent="." instance=ExtResource("2_hi3tv")]
-layer_0/tile_data = PackedInt32Array(65535, 1, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 65537, 0, -1, 65537, 0, -65535, 65537, 0, -65533, 65537, 0, -131069, 65537, 0, -196605, 65537, 0, -196606, 65537, 0, -196607, 65537, 0, -196608, 65537, 0, -131073, 65537, 0, -131074, 65537, 0, -131075, 65537, 0, -65539, 65537, 0, -3, 65537, 0, 65533, 65537, 0, 131069, 65537, 0, 131070, 65537, 0, 131071, 65537, 0, 65536, 65537, 0, 65537, 65537, 0, 65538, 65537, 0, 65539, 65537, 0, -65534, 1, 0, -131070, 1, 0, -131071, 1, 0, -131072, 1, 0, -65537, 1, 0, -65538, 1, 0, -2, 1, 0, 65534, 1, 0, -65536, 1, 0)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

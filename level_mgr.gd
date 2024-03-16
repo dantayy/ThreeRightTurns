@@ -1,4 +1,4 @@
-extends TileMap
+class_name Level extends TileMap
 
 # time it takes for A* to take a step
 @export var step_time = 1.0
