@@ -1,7 +1,8 @@
-extends CharacterBody2D
+class_name Righty extends CharacterBody2D
 
 # custom node vars
-var speed = 200
+@export var base_speed = 200
+var speed = base_speed
 var direction = Vector2.UP
 var turnKeyed = false # set to true when button pressed
 var turnCapable = false
@@ -38,26 +39,28 @@ func _input(event):
 		elif not turnKeyed:
 			turnKeyed = true
 
-
+func reset():
+	run = false
+	turnKeyed = false
+	turnCapable = false
+	direction = Vector2.UP
+	rotation = 0
+	speed = base_speed
+	
 func _on_wall_collision_detector_body_entered(body):
 	# wall detected to the right, turn not possible
 	turnCapable = false
-
 
 func _on_wall_collision_detector_body_exited(body):
 	# wall no longer detected to the right, turn possible
 	turnCapable = true
 
-
 func _on_boost_collision_detector_body_entered(body):
 	# increase righty's speed
 	speed += 50
 
-
 func _on_goal_collision_detector_body_entered(body):
 	print("Player reached goal!")
-	run = false
-	turnKeyed = false
-	turnCapable = false
+	reset()
 	end_race.emit()
 	#get_tree().quit()

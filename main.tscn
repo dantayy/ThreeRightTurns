@@ -5,9 +5,15 @@
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_dkhg0")
-level_names = Array[String](["Level1", "Level2", "Level3"])
 
 [node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="StatusText" type="RichTextLabel" parent="HUD"]
 anchors_preset = 8
@@ -22,6 +28,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 100
 bbcode_enabled = true
 text = "JOE BIDEN"
 fit_content = true
@@ -29,3 +36,9 @@ autowrap_mode = 0
 
 [node name="Righty" parent="." instance=ExtResource("2_p1m7t")]
 position = Vector2(32, 32)
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="end_race" from="Righty" to="." method="_on_righty_end_race"]
+[connection signal="start_race" from="Righty" to="." method="_on_righty_start_race"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

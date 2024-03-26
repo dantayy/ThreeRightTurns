@@ -23,7 +23,7 @@ const main_source = 1
 
 # signal to emit when the A* pathing completes
 signal pathing_complete()
-#signal to emit when this level loads
+# signal to emit when this level loads
 signal level_loaded(pathing_possible:bool)
 # signal to emit when there is no level to load in this one's place, 
 signal game_over()
@@ -97,6 +97,3 @@ func load_next_level():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
-func _on_righty_start_race():
-	walk_path()
