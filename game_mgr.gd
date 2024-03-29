@@ -40,7 +40,16 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	pass
+	# set goal arrow on player to point towards goal every frame
+	var arrow_rotation = atan2(current_level.end_point.y *
+	current_level.tile_set.tile_size.y +
+	current_level.tile_set.tile_size.y / 2 -
+	player_character.position.y,
+	current_level.end_point.x *
+	current_level.tile_set.tile_size.x +
+	current_level.tile_set.tile_size.x / 2 -
+	player_character.position.x) + PI / 2
+	player_character.rotate_arrow(arrow_rotation)
 
 # capture & process keyboard/mouse/gamepad events here
 func _input(event):
@@ -50,7 +59,7 @@ func _input(event):
 		if restart:
 			restart = false
 			game_timer.stop()
-			level_setup(start_level_path, "Ready?")
+			level_setup(start_level_path, "[center]Ready?[/center]")
 		# if the pregame flag is set, pass control back to the player character
 		elif pregame:
 			pregame = false
@@ -60,7 +69,7 @@ func _input(event):
 		# if the postgame flag is set, load the next level
 		elif postgame:
 			postgame = false
-			level_setup(current_level.next_level_name, "Ready?")
+			level_setup(current_level.next_level_name, "[center]Ready?[/center]")
 
 func level_setup(new_level_path:String, overlay:String):
 	# load next level based on passed path string
@@ -90,6 +99,8 @@ func level_setup(new_level_path:String, overlay:String):
 	overlay_text.text = overlay
 	# enable overlay
 	hud.visible = true
+	# reset player
+	player_character.reset()	
 	# disable player
 	player_character.visible = false
 	player_character.set_process_input(false)	
@@ -109,21 +120,22 @@ func _on_righty_start_race():
 
 # triggered when player lands in the goal tile
 func _on_righty_end_race():
+	print("Player won race.")
 	# set overlay text
 	overlay_text.text = "[center]Next?[/center]"
 	# enable overlay
 	hud.visible = true
 	# disable player
-	player_character.visible = false
-	player_character.set_process_input(false)
+	#player_character.visible = false
+	#player_character.set_process_input(false)
 	# disable level
-	current_level.set_process(false)
+	#current_level.set_process(false)
 	# set post-game flag
 	postgame = true
 
 func _on_current_level_pathing_complete():
 	if not postgame:
-		player_character.reset()
+		print("A* won race.")
 		level_setup(level_path, "[center]Retry?[/center]")
 
 func _on_current_level_level_loaded(pathing_possible:bool):
@@ -133,9 +145,9 @@ func _on_current_level_level_loaded(pathing_possible:bool):
 		get_tree().quit()
 
 func _on_current_level_game_over():
-	overlay_text.text = "[center]End!\nPress to restart,\notherwise game will close itself.[/center]"
+	overlay_text.text = "[center]End!\nPress to restart, otherwise game will close itself.[/center]"
 	restart = true
-	game_timer.start(3)
+	game_timer.start(10)
 
 func _on_timer_timeout():
 	if(restart):

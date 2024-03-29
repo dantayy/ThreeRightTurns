@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://7g4rq28jatn2"]
+[gd_scene load_steps=9 format=3 uid="uid://7g4rq28jatn2"]
 
 [ext_resource type="Texture2D" uid="uid://bdh7tau2xtw2h" path="res://icon.svg" id="1_ew410"]
 [ext_resource type="Script" path="res://righty.gd" id="2_mgwml"]
+[ext_resource type="Texture2D" uid="uid://ck58yegdudpxn" path="res://Arrow.png" id="3_kxmkp"]
+[ext_resource type="PackedScene" uid="uid://b17wlmcidb83i" path="res://righteous_knight.tscn" id="3_ycpqd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y7ero"]
 size = Vector2(48, 48)
@@ -24,10 +26,14 @@ metadata/_edit_group_ = true
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_y7ero")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="KnightSprite" type="Sprite2D" parent="."]
 position = Vector2(0, 9.53674e-07)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_ew410")
+
+[node name="ArrowSprite" type="Sprite2D" parent="."]
+position = Vector2(-1.90735e-06, 2.86102e-06)
+texture = ExtResource("3_kxmkp")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(5.65, 5.65)
@@ -54,6 +60,14 @@ collision_mask = 32
 position = Vector2(0, -28)
 shape = SubResource("RectangleShape2D_5lm85")
 
+[node name="SlowCollisionDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SlowCollisionDetector"]
+position = Vector2(0, -28)
+shape = SubResource("RectangleShape2D_5lm85")
+
 [node name="GoalCollisionDetector" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 16
@@ -62,7 +76,16 @@ collision_mask = 16
 position = Vector2(0, 28)
 shape = SubResource("RectangleShape2D_kqc6x")
 
+[node name="KnightViewport" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(256, 256)
+
+[node name="Knight" parent="KnightViewport" instance=ExtResource("3_ycpqd")]
+
+[connection signal="speed_change" from="." to="KnightViewport/Knight" method="_on_righty_speed_change"]
 [connection signal="body_entered" from="WallCollisionDetector" to="." method="_on_wall_collision_detector_body_entered"]
 [connection signal="body_exited" from="WallCollisionDetector" to="." method="_on_wall_collision_detector_body_exited"]
 [connection signal="body_entered" from="BoostCollisionDetector" to="." method="_on_boost_collision_detector_body_entered"]
+[connection signal="body_entered" from="SlowCollisionDetector" to="." method="_on_slow_collision_detector_body_entered"]
 [connection signal="body_entered" from="GoalCollisionDetector" to="." method="_on_goal_collision_detector_body_entered"]

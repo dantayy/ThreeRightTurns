@@ -2,6 +2,8 @@ class_name Righty extends CharacterBody2D
 
 # custom node vars
 @export var base_speed = 200
+@export var min_speed = 150
+@export var max_speed = 750
 var speed = base_speed
 var direction = Vector2.UP
 var turnKeyed = false # set to true when button pressed
@@ -11,16 +13,23 @@ var run = false # set to true when button pressed at start of game, do not unset
 # signals to start/end races against pathfinder
 signal start_race()
 signal end_race()
+signal speed_change(new_speed:int)
 
 # perform frame update actions in here
 func _physics_process(_delta):
+	# always update the knight sprite to the viewport of the 3d knight model
+	var texture = get_node("KnightViewport").get_texture()
+	get_node("KnightSprite").texture = texture
+	# race not started, do nothing
 	if not run:
 		return
+	# process turns
 	elif turnKeyed and turnCapable:
 		direction = direction.rotated(PI / 2)
 		rotate(PI / 2)
 		turnKeyed = not turnKeyed
 		turnCapable = not turnCapable
+	# apply motion
 	velocity = direction * speed
 	move_and_slide()
 
@@ -36,6 +45,7 @@ func _input(event):
 		if not run:
 			run = true
 			start_race.emit()
+			speed_change.emit(speed)
 		elif not turnKeyed:
 			turnKeyed = true
 
@@ -46,21 +56,30 @@ func reset():
 	direction = Vector2.UP
 	rotation = 0
 	speed = base_speed
-	
-func _on_wall_collision_detector_body_entered(body):
+	speed_change.emit(0)	
+
+func rotate_arrow(radians):
+	get_node("ArrowSprite").rotation = radians - rotation
+
+func _on_wall_collision_detector_body_entered(_body):
 	# wall detected to the right, turn not possible
 	turnCapable = false
 
-func _on_wall_collision_detector_body_exited(body):
+func _on_wall_collision_detector_body_exited(_body):
 	# wall no longer detected to the right, turn possible
 	turnCapable = true
 
-func _on_boost_collision_detector_body_entered(body):
+func _on_boost_collision_detector_body_entered(_body):
 	# increase righty's speed
-	speed += 50
+	speed = min(speed + 50, max_speed)
+	speed_change.emit(speed)
 
-func _on_goal_collision_detector_body_entered(body):
+func _on_slow_collision_detector_body_entered(_body):
+	speed = max(speed - 50, min_speed)
+	speed_change.emit(speed)
+
+func _on_goal_collision_detector_body_entered(_body):
 	print("Player reached goal!")
 	reset()
 	end_race.emit()
-	#get_tree().quit()
+	speed_change.emit(0)

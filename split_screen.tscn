@@ -10,23 +10,29 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="LeftText" type="TextEdit" parent="."]
+process_mode = 4
 custom_minimum_size = Vector2(420, 1080)
 layout_mode = 2
-text = "RIGHTEOUS KNIGHT
+text = "RIGHTEOUS KNIGHT!
 
-or
+Reach the goal before your pathfinding opponent using only RIGHT turns! 
 
-THREE RIGHT TURNS
-
-or 
-
-YOU SPIN ME RIGHT ROUND"
+Use the RIGHT ARROW KEY for all interactions!"
+editable = false
+context_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 custom_minimum_size = Vector2(1080, 1080)
 layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+process_mode = 3
 handle_input_locally = false
 size = Vector2i(1080, 1080)
 render_target_update_mode = 4
@@ -34,13 +40,14 @@ render_target_update_mode = 4
 [node name="Main" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_xshhq")]
 
 [node name="RightText" type="TextEdit" parent="."]
+process_mode = 4
 custom_minimum_size = Vector2(420, 1080)
 layout_mode = 2
 text = "black == walls
 
 white == walkable
 
-yellow == turnable
+yellow == slowdown
 
 blue == boost
 
@@ -49,3 +56,11 @@ red == spawn
 green == goal
 
 brown == opponent pathing"
+editable = false
+context_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false

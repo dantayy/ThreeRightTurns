@@ -79,21 +79,8 @@ func walk_path():
 	# draw the path over the map with the set ammount of time between steps
 	for cell in path:
 		await get_tree().create_timer(step_time).timeout
-		set_cell(path_layer, cell, main_source, pathfinder_atlas)
+		set_cell(main_layer, cell, main_source, pathfinder_atlas)
 		
 	# send the pathing complete signal to alert a game manager to initiate the loss state
 	print("Path walked by the pathfinder!")
 	pathing_complete.emit()
-	
-func load_next_level():
-	# attempt to load whatever is in the next level name by path string
-	var error:Error = get_tree().change_scene_to_file(next_level_name)
-	# force game to end if no next level could be loaded
-	if(error != OK):
-		print("Attempt to load another level failed, ending game!")
-		game_over.emit()
-		
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
